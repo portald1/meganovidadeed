@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script>
+    const urls = [
+      "/up1/",
+      "/up2/",
+      "/up3/"
+    ];
+
+    const key = "redirectCount";
+    const count = parseInt(localStorage.getItem(key)) || 0;
+    localStorage.setItem(key, count + 1);
+
+    const params = location.search; // pega ?utm=xyz&...
+    const nextUrl = urls[count % urls.length] + params;
+
+    location.href = nextUrl;
+  </script>
+</head>
+<body></body>
+</html>
