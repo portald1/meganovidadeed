@@ -13,8 +13,19 @@
     const count = parseInt(localStorage.getItem(key)) || 0;
     localStorage.setItem(key, count + 1);
 
-    const params = location.search; // pega ?utm=xyz&...
-    const nextUrl = urls[count % urls.length] + params;
+    // Pega os parâmetros da URL e cria um objeto para manipulá-los
+    const params = new URLSearchParams(location.search);
+
+    // Remove o parâmetro "name"
+    params.delete('name');
+
+    // Converte os parâmetros de volta para uma string
+    const newParams = params.toString();
+
+    // Adiciona o "?" no início da string de parâmetros, se houver algum
+    const finalParams = newParams ? '?' + newParams : '';
+
+    const nextUrl = urls[count % urls.length] + finalParams;
 
     location.href = nextUrl;
   </script>
