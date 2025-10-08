@@ -1,0 +1,6 @@
+{
+  "$schema": "https://developers.cloudflare.com/pages/platform/headers",
+  "version": 1,
+  "include": ["/*"],
+  "exclude": []
+}

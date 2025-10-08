@@ -2,37 +2,62 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script>
-    const urls = [
-      "/up3/",
-      "/upsell1/",
-      "/upsell2/",
-      "/upsell3/",
-      "/upsell4/",
-      "/up2/",
-      "/up1/"
-    ];
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script data-cfasync="false">
+    (function() {
+      const urls = [
+        "/upsell1/",
+        "/upsell2/",
+        "/upsell3/",
+        "/upsell4/",
+        "/up1/",
+        "/up2/",
+        "/up3/"
+      ];
 
-    const key = "redirectCount";
-    const count = parseInt(localStorage.getItem(key)) || 0;
-    localStorage.setItem(key, count + 1);
+      const key = "redirectCount";
+      let count = 0;
+      
+      try {
+        // Tenta usar localStorage com fallback para cookies
+        if (typeof localStorage !== 'undefined' && localStorage !== null) {
+          count = parseInt(localStorage.getItem(key)) || 0;
+          localStorage.setItem(key, count + 1);
+        } else {
+          // Fallback para cookies se localStorage não estiver disponível
+          const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
+          count = match ? parseInt(match[2]) : 0;
+          document.cookie = key + '=' + (count + 1) + '; path=/; max-age=31536000; SameSite=Lax';
+        }
+      } catch(e) {
+        // Se tudo falhar, usa um método baseado em sessão
+        count = Math.floor(Math.random() * urls.length);
+      }
 
-    // Pega os parâmetros da URL e cria um objeto para manipulá-los
-    const params = new URLSearchParams(location.search);
+      // Pega os parâmetros da URL e cria um objeto para manipulá-los
+      const params = new URLSearchParams(location.search);
 
-    // Remove o parâmetro "name"
-    params.delete('name');
+      // Remove o parâmetro "name"
+      params.delete('name');
 
-    // Converte os parâmetros de volta para uma string
-    const newParams = params.toString();
+      // Converte os parâmetros de volta para uma string
+      const newParams = params.toString();
 
-    // Adiciona o "?" no início da string de parâmetros, se houver algum
-    const finalParams = newParams ? '?' + newParams : '';
+      // Adiciona o "?" no início da string de parâmetros, se houver algum
+      const finalParams = newParams ? '?' + newParams : '';
 
-    const nextUrl = urls[count % urls.length] + finalParams;
+      const nextUrl = urls[count % urls.length] + finalParams;
 
-    location.href = nextUrl;
+      // Redireciona imediatamente
+      location.replace(nextUrl);
+    })();
   </script>
 </head>
-<body></body>
+<body>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=/upsell1/">
+  </noscript>
+</body>
 </html>
